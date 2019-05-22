@@ -71,7 +71,7 @@ def find_or_create_player(first_name, last_name, team_id):
 
 
 #1. Get URLs that need to be scraped
-get_match_url_query = 'SELECT id, url FROM Matches WHERE date > "2018-01-01" AND date < "2018-12-31";'
+get_match_url_query = 'SELECT id, url FROM Matches WHERE date > "2018-01-01" AND date < "2018-12-31" AND round = 2;'
 mycursor.execute(get_match_url_query, )
 match_list = mycursor.fetchall()
 
@@ -80,7 +80,7 @@ driver = webdriver.Chrome(ChromeDriverManager().install())
 wait = WebDriverWait(driver, 10)
 
 #4. Go through all URLs
-for match in match_list[:1]:
+for match in match_list:
     match_id = match[0]
     url = match[1]
     driver.get(url)
@@ -111,10 +111,12 @@ for match in match_list[:1]:
                 last_name = middle_name.capitalize() + ' ' + last_name
             if xpath == home_xpath_div:
                 avoid_name_collision = home_team
+                current_team = home_id
             elif xpath == away_xpath_div:
                 avoid_name_collision = away_team
+                current_team = away_id
             full_name = first_name + '_' + last_name + '_' + avoid_name_collision
-            player_id = find_or_create_player(first_name, last_name, str(home_id))
+            player_id = find_or_create_player(first_name, last_name, str(current_team))
             #print(player_id)
             #i += 1
 
