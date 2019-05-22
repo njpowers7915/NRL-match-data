@@ -142,6 +142,7 @@ for match in match_list[:1]:
         #clean csv_data
     for column in ['conversion_percentage', 'tackle_percentage']:
         csv_data[column] = csv_data[column].str.replace('%', '').astype(float) / 100
+        csv_data[column] = csv_data[column].round(3)
 
     for column in ['minutes_played', 'stint_one', 'stint_two']:
         csv_data[column] = csv_data[column].str.replace(':', '.').astype(float)
@@ -150,14 +151,12 @@ for match in match_list[:1]:
         #csv_data['minutes_played'] = csv_data['minutes_played'].str.replace(':00', '').astype(int)
     csv_data['position_id'] = csv_data['position'].apply(find_position_id)
 
-        #add columns so everything is ready to be added to database
-
-    #print(csv_data)
+    print(csv_data)
 
     #CSV naming
     csv_identifiers = url.split('/')
     csv_name = '_'.join([csv_identifiers[-4], csv_identifiers[-3], csv_identifiers[-2]])
-    csv_data.to_csv(csv_name + '.csv', names=column_names, header=None)
+    csv_data.to_csv(csv_name + '.csv') #index=False)
 
 
     #print(name_field)
