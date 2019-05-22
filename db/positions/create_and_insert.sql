@@ -12,7 +12,7 @@ CREATE TABLE Positions (
 #2. Insert Values
 INSERT INTO Positions (position_name, max_on_field, is_forward, is_back, is_starter)
 VALUES ('Fullback', 1, 0, 1, 1),
-('Wing', 2, 0, 1, 1),
+('Winger', 2, 0, 1, 1),
 ('Centre', 2, 0, 1, 1),
 ('Five-Eighth', 1, 0, 1, 1),
 ('Halfback', 1, 0, 1, 1),
