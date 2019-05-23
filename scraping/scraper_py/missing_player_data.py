@@ -20,7 +20,7 @@ mydb = mysql.connector.connect(
   database="NRL_data"
 )
 mycursor = mydb.cursor()
-'''
+
 #1. Get URLs that need to be scraped
 get_team_urls = 'SELECT url FROM Teams;'
 mycursor.execute(get_team_urls, )
@@ -30,11 +30,11 @@ roster_pages = []
 for url in url_list:
     page = url[0] + '/teams'
     roster_pages.append(page)
-'''
+
 #2. Set Up WebDriver
 driver = webdriver.Chrome(ChromeDriverManager().install())
 wait = WebDriverWait(driver, 10)
-'''
+
 team_player_urls = []
 for roster in roster_pages:
     driver.get(roster)
@@ -48,8 +48,8 @@ for roster in roster_pages:
                 i += 1
             except:
                 break
-'''
 
+player_info_list = []
 for player_url in team_player_urls[:1]:
     driver.get(player_url)
     player_info = {}
@@ -93,5 +93,7 @@ for player_url in team_player_urls[:1]:
             player_info['country'] = birthplace.split(',')[1].strip()
     except:
         continue
+    player_info_list.append(player_info)
 
-    print(player_info)
+csv_data = pd.DataFrame(player_info_list)
+csv_data.to_csv('player_info.csv') #index=False)
