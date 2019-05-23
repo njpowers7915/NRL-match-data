@@ -59,7 +59,12 @@ for player_url in team_player_urls[:1]:
     find_team_id = 'SELECT id FROM Teams WHERE url = %s;'
     mycursor.execute(find_team_id, (current_team_url,))
     player_info['current_team'] = mycursor.fetchone()[0]
-    player_info['name'] = driver.find_element_by_xpath('/html/body/div[4]/main/div[1]/div[1]/div[3]/div/div/div/div/div/h1').get_attribute('innerText').strip()
+    name = driver.find_element_by_xpath('/html/body/div[4]/main/div[1]/div[1]/div[3]/div/div/div/div/div/h1').get_attribute('innerText').strip()
+    player_info['first_name'] = name.split(' ')[0].strip()
+    if len(name.split(' ')) == 3:
+        player_info['last_name'] = name.split(' ')[1] + name.split(' ')[2]
+    else:
+        player_info['last_name'] = name.split(' ')[1]
     height = driver.find_element_by_xpath('/html/body/div[4]/main/div[1]/div[2]/div/div/div/div/section[1]/div[2]/div/div/div/div[1]/div/dl[1]/dd').get_attribute('innerText').strip()
     try:
         player_info['height'] = int(height.split(' ')[0])
