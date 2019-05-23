@@ -20,6 +20,22 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-#Find and Update Match Formulas
-def update_match(id):
-    continue
+#1. Get URLs that need to be scraped
+get_team_urls = 'SELECT url FROM Teams;'
+mycursor.execute(get_team_urls, )
+url_list = mycursor.fetchall()
+for url in url_list[:1]:
+    roster_page = requests.get(url[0] + '/teams')
+    soup = BeautifulSoup(roster_page.content)
+    player_profiles = soup.find_all("a", "card-themed-hero-profile")
+    print(player_profiles)
+
+#2. Set Up WebDriver
+driver = webdriver.Chrome(ChromeDriverManager().install())
+wait = WebDriverWait(driver, 10)
+
+//*[@id="profile-search-results"]/section[1]/div[2]/div[2]/div/div/a
+//*[@id="profile-search-results"]/section[1]/div[2]/div[4]/div/div/a
+--> 1 through 18
+//*[@id="profile-search-results"]/section[2]/div[2]/div[2]/div/div/a
+--> 1 through 14
