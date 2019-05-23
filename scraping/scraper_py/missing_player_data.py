@@ -24,15 +24,27 @@ mycursor = mydb.cursor()
 get_team_urls = 'SELECT url FROM Teams;'
 mycursor.execute(get_team_urls, )
 url_list = mycursor.fetchall()
-for url in url_list[:1]:
-    roster_page = requests.get(url[0] + '/teams')
-    soup = BeautifulSoup(roster_page.content)
-    player_profiles = soup.find_all("a", "card-themed-hero-profile")
-    print(player_profiles)
+
+roster_pages = []
+for url in url_list:
+    page = requests.get(url[0] + '/teams')
+    roster_pages.append(page)
 
 #2. Set Up WebDriver
 driver = webdriver.Chrome(ChromeDriverManager().install())
 wait = WebDriverWait(driver, 10)
+
+for roster in roster_pages:
+    team_player_urls = []
+    driver.get(roster)
+    i = 1
+    for player in ['1', '2']:
+        while driver.find_element_by_xpath('//*[@id="profile-search-results"]/section[' + player +']/div[2]/div[' + str(i) + ']/div/div/a'):
+            player_profile = driver.find_element_by_xpath('//*[@id="profile-search-results"]/section[' + player +']/div[2]/div[' + str(i) + ']/div/div/a')
+            team_player_urls.
+
+
+    away_team = driver.find_element_by_xpath('//*[@id="vue-match-centre"]/div/div[1]/div/div/div[2]/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div/p[2]').get_attribute('innerText').strip()
 
 //*[@id="profile-search-results"]/section[1]/div[2]/div[2]/div/div/a
 //*[@id="profile-search-results"]/section[1]/div[2]/div[4]/div/div/a
