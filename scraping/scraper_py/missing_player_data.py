@@ -50,8 +50,7 @@ for roster in roster_pages:
                 break
 '''
 
-team_player_urls = ['https://www.dragons.com.au/teams/telstra-premiership/st-george-illawarra-dragons/jack-de-belin/']
-for player_url in team_player_urls:
+for player_url in team_player_urls[:1]:
     driver.get(player_url)
     player_info = {}
     player_info['is_active'] = True
@@ -91,12 +90,3 @@ for player_url in team_player_urls:
         continue
 
     print(player_info)
-'''
-    away_team = driver.find_element_by_xpath('//*[@id="vue-match-centre"]/div/div[1]/div/div/div[2]/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div/p[2]').get_attribute('href').strip()
-
-//*[@id="profile-search-results"]/section[1]/div[2]/div[2]/div/div/a
-//*[@id="profile-search-results"]/section[1]/div[2]/div[4]/div/div/a
---> 1 through 18
-//*[@id="profile-search-results"]/section[2]/div[2]/div[2]/div/div/a
---> 1 through 14
-'''
