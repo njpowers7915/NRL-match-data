@@ -56,5 +56,5 @@ CREATE TABLE PlayerMatchStats (
   FOREIGN KEY (match_id) REFERENCES Matches(id),
   FOREIGN KEY (player_id) REFERENCES Players(id),
   FOREIGN KEY (team_id) REFERENCES Teams(id),
-  FOREIGN KEY (position_id) REFERENCES Positions(id),
+  FOREIGN KEY (position_id) REFERENCES Positions(id)
 );

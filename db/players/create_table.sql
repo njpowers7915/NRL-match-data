@@ -9,7 +9,7 @@ CREATE TABLE Players (
   date_of_birth date,
   city varchar(255),
   state varchar(255),
-  country_id int,
+  country varchar(50),
   url varchar(255),
   PRIMARY KEY (id),
   FOREIGN KEY (current_team) REFERENCES Teams(id),
