@@ -149,21 +149,95 @@ for round in match_dictionary:
         csv_data = csv_data.replace({pd.np.nan: 0})
             #clean csv_data
         for column in ['conversion_percentage', 'tackle_percentage']:
-            csv_data[column] = csv_data[column].str.replace('%', '').astype(float) / 100
+            csv_data[column] = csv_data[column].str.replace('%', '').astype('float') / 100
             csv_data[column] = csv_data[column].round(3)
 
         for column in ['minutes_played', 'stint_one', 'stint_two']:
-            csv_data[column] = csv_data[column].str.replace(':', '.').astype(float)
+            csv_data[column] = csv_data[column].str.replace(':', '.').astype('float')
 
-        csv_data['average_play_the_ball_seconds'] = csv_data['average_play_the_ball_seconds'].str.replace('s', '').astype(float)
+        csv_data['average_play_the_ball_seconds'] = csv_data['average_play_the_ball_seconds'].str.replace('s', '').astype('float')
             #csv_data['minutes_played'] = csv_data['minutes_played'].str.replace(':00', '').astype(int)
         csv_data['position_id'] = csv_data['position'].apply(find_position_id)
 
-
         print(csv_data)
 
+        i = 0
+        while i <= 33:
+            p = csv_data.iloc[i]
+
+            result_tuple = (p['match_id'].astype('int'),
+            p['team_id'].astype('int'),
+            p['position_id'].astype('int'),
+            p['minutes_played'].astype('float'),
+            p['points'].astype('int'),
+            p['tries'].astype('int'),
+            p['conversions'].astype('int'),
+            p['conversion_attempts'].astype('int'),
+            p['penalty_goals'].astype('int'),
+            p['conversion_percentage'].astype('float'),
+            p['field_goals'].astype('int'),
+            p['total_runs'].astype('int'),
+            p['total_run_metres'].astype('int'),
+            p['kick_return_metres'].astype('int'),
+            p['post_contact_metres'].astype('int'),
+            p['line_breaks'].astype('int'),
+            p['line_break_assists'].astype('int'),
+            p['try_assists'].astype('int'),
+            p['line_engaged_runs'].astype('int'),
+            p['tackle_breaks'].astype('int'),
+            p['hit_ups'].astype('int'),
+            p['play_the_ball'].astype('int'),
+            p['average_play_the_ball_seconds'].astype('float'),
+            p['dummy_half_runs'].astype('int'),
+            p['dummy_half_run_metres'].astype('int'),
+            p['steals'].astype('int'),
+            p['offloads'].astype('int'),
+            p['dummy_passes'].astype('int'),
+            p['passes'].astype('int'),
+            p['receipts'].astype('int'),
+            p['pass_to_run_ratio'].astype('float'),
+            p['tackle_percentage'].astype('int'),
+            p['tackles_made'].astype('int'),
+            p['tackles_missed'].astype('int'),
+            p['intercepts'].astype('int'),
+            p['kicks_defused'].astype('int'),
+            p['kicks'].astype('int'),
+            p['kicking_metres'].astype('int'),
+            p['forced_drop_outs'].astype('int'),
+            p['bomb_kicks'].astype('int'),
+            p['grubbers'].astype('int'),
+            p['fourty_twenty'].astype('int'),
+            p['cross_field_kicks'].astype('int'),
+            p['kicked_dead'].astype('int'),
+            p['errors'].astype('int'),
+            p['handling_errors'].astype('int'),
+            p['one_on_ones_lost'].astype('int'),
+            p['penalties'].astype('int'),
+            p['on_report'].astype('int'),
+            p['sin_bins'].astype('int'),
+            p['send_offs'].astype('int'),
+            p['stint_one'].astype('int'),
+            p['stint_two'].astype('int'))
+            query = '''INSERT INTO PlayerMatchStats (match_id, team_id, position_id, minutes_played, points, tries,
+            conversions, penalty_goals, conversion_percentage, field_goals, total_runs, total_run_metres,
+            kick_return_metres, post_contact_metres, line_breaks, line_break_assists, try_assists,
+            line_engaged_runs, tackle_breaks, hit_ups, play_the_ball, average_play_the_ball_seconds,
+            dummy_half_runs, dummy_half_run_metres, steals, offloads, dummy_passes, passes, receipts,
+            pass_to_run_ratio, tackle_percentage, tackles_made, tackles_missed, incercepts, kicks_defused,
+            kicks, kicking_metres, forced_drop_outs, bomb_kicks, grubbers, fourty_twenty, cross_field_kicks,
+            kicked_dead, errors, handling_errors, one_on_ones_lost, penalties, on_report, sin_bins, send_offs)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+            '''
+
+            mycursor.execute(query, result_tuple)
+            mycursor.commit()
+            print('success!')
+            i += 1
+
         #CSV naming
-    csv_data.to_csv('round_' + str(round) + '_2018' + '.csv') #index=False)
+    #csv_data.to_csv('round_' + str(round) + '_2018' + '.csv') #index=False)
 
 
     #print(name_field)
