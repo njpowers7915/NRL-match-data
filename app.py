@@ -1,9 +1,16 @@
 from flask import Flask, render_template
+from flask_mysqldb import MySQL
+import yaml
 
 #create an instance of the Flask class
 app = Flask(__name__)
-#This prevents us from having to reload the server for every update
-#app.debug = True
+
+#Configure db
+db = yaml.load(open)
+app.config['MYSQL_HOST'] = db['mysql_host']
+app.config['MYSQL_USER'] = db['mysql_user']
+app.config['MYSQL_PASSWORD'] = db['mysql_password']
+app.config['MYSQL_DB'] = db['mysql_db']
 
 @app.route('/')
 def index():
