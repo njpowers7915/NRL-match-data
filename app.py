@@ -1,9 +1,9 @@
-from flask import Flask
+from flask import Flask, render_template
 
 #create an instance of the Flask class
 app = Flask(__name__)
 #This prevents us from having to reload the server for every update
-app.debug = True
+#app.debug = True
 
 @app.route('/')
 def index():
@@ -11,7 +11,7 @@ def index():
 
 #this will allow us to start application
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
 
 
