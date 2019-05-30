@@ -71,7 +71,7 @@ def find_or_create_player(first_name, last_name, team_id):
 
 match_dictionary = {}
 #1. Get URLs that need to be scraped
-i = 1
+i = 10
 while i <= 25:
     get_match_url_query = 'SELECT id, url FROM Matches WHERE date > "2018-01-01" AND date < "2018-12-31" AND round = ' + str(i) +';'
     mycursor.execute(get_match_url_query, )
@@ -85,6 +85,7 @@ wait = WebDriverWait(driver, 10)
 
 #4. Go through all URLs
 for round in match_dictionary:
+    player_match_stats = {}
     for match in match_dictionary[round]:
         match_id = match[0]
         url = match[1]
@@ -102,7 +103,6 @@ for round in match_dictionary:
         home_xpath_div = '1'
         away_xpath_div = '2'
 
-        player_match_stats = {}
         for xpath in [home_xpath_div, away_xpath_div]:
             wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="player-stats"]/div[' + xpath + ']/div/div[3]/div/table/tbody')))
 
@@ -142,27 +142,33 @@ for round in match_dictionary:
                         stat_field = driver.find_element_by_xpath('//*[@id="player-stats"]/div[' + xpath + ']/div/div[3]/div/table/tbody/tr[' + str(i) + ']/td[' + str(column) + ']')
                         player_match_stats[full_name].append(stat_field.get_attribute('innerText').strip())
                         column += 1
+                print(player_match_stats[full_name])
                 i += 1
 
-        csv_data = pd.DataFrame.from_dict(player_match_stats, orient='index', columns=column_names).replace('-', 0)
+    csv_data = pd.DataFrame.from_dict(player_match_stats, orient='index', columns=column_names).replace('-', 0)
 
-        csv_data = csv_data.replace({pd.np.nan: 0})
-            #clean csv_data
-        for column in ['conversion_percentage', 'tackle_percentage']:
-            csv_data[column] = csv_data[column].str.replace('%', '').astype('float') / 100
-            csv_data[column] = csv_data[column].round(3)
+    csv_data = csv_data.replace({pd.np.nan: 0})
+        #clean csv_data
+    for column in ['conversion_percentage', 'tackle_percentage']:
+        csv_data[column] = csv_data[column].str.replace('%', '').astype('float') / 100
+        csv_data[column] = csv_data[column].round(3)
 
-        for column in ['minutes_played', 'stint_one', 'stint_two']:
-            csv_data[column] = csv_data[column].str.replace(':', '.').astype('float')
+    for column in ['minutes_played', 'stint_one', 'stint_two']:
+        csv_data[column] = csv_data[column].str.replace(':', '.').astype('float')
 
-        csv_data['average_play_the_ball_seconds'] = csv_data['average_play_the_ball_seconds'].str.replace('s', '').astype('float')
+    csv_data['average_play_the_ball_seconds'] = csv_data['average_play_the_ball_seconds'].str.replace('s', '').astype('float')
             #csv_data['minutes_played'] = csv_data['minutes_played'].str.replace(':00', '').astype(int)
-        csv_data['position_id'] = csv_data['position'].apply(find_position_id)
+    csv_data['position_id'] = csv_data['position'].apply(find_position_id)
 
-        print(csv_data)
+    print(csv_data)
 
-        i = 0
-        while i <= 33:
+    #CSV naming
+    csv_data.to_csv('round_' + str(round) + '_2018' + '.csv') #index=False)
+
+
+'''
+    i = 0
+    while i <= 33:
             p = csv_data.iloc[i]
 
             result_tuple = (p['match_id'].astype('int'),
@@ -218,7 +224,7 @@ for round in match_dictionary:
             p['send_offs'].astype('int'),
             p['stint_one'].astype('int'),
             p['stint_two'].astype('int'))
-            query = '''INSERT INTO PlayerMatchStats (match_id, team_id, position_id, minutes_played, points, tries,
+            query = INSERT INTO PlayerMatchStats (match_id, team_id, position_id, minutes_played, points, tries,
             conversions, penalty_goals, conversion_percentage, field_goals, total_runs, total_run_metres,
             kick_return_metres, post_contact_metres, line_breaks, line_break_assists, try_assists,
             line_engaged_runs, tackle_breaks, hit_ups, play_the_ball, average_play_the_ball_seconds,
@@ -229,15 +235,13 @@ for round in match_dictionary:
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
-            '''
+
 
             mycursor.execute(query, result_tuple)
             mycursor.commit()
             print('success!')
             i += 1
-
-        #CSV naming
-    #csv_data.to_csv('round_' + str(round) + '_2018' + '.csv') #index=False)
+'''
 
 
     #print(name_field)

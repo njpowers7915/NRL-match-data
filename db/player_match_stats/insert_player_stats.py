@@ -19,9 +19,11 @@ open_file = open(csv_name)
 read_file = list(csv.reader(open_file))
 
 for i in read_file[1:]:
-    for each in i:
-        if each == '':
-            each = 0
+    stat = 0
+    while stat <= 57:
+        if i[stat] == '':
+            i[stat] = None
+        stat += 1
     result_tuple = (i[3],
     i[1],
     i[2],
