@@ -11,3 +11,6 @@ WHERE id = 1626;
 UPDATE PlayerMatchStats
 SET player_id = 1626
 WHERE player_id IN (229, 485);
+
+--Remove duplicate entries
+DELETE FROM Players WHERE id IN (229, 485);
