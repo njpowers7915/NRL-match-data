@@ -68,12 +68,12 @@ def find_or_create_player(first_name, last_name, team_id):
     else:
         result = result[0]
         return int(result)
-
+errors = {'url': []}
 match_dictionary = {}
 #1. Get URLs that need to be scraped
-i = 10
-while i <= 25:
-    get_match_url_query = 'SELECT id, url FROM Matches WHERE date > "2018-01-01" AND date < "2018-12-31" AND round = ' + str(i) +';'
+i = 1
+while i <= 8:
+    get_match_url_query = 'SELECT id, url FROM Matches WHERE date > "2019-01-01" AND date < "2019-12-31" AND round = ' + str(i) +';'
     mycursor.execute(get_match_url_query, )
     match_list = mycursor.fetchall()
     match_dictionary[i] = match_list
@@ -89,61 +89,66 @@ for round in match_dictionary:
     for match in match_dictionary[round]:
         match_id = match[0]
         url = match[1]
-        driver.get(url)
+        try:
+            driver.get(url)
 
-        home_team = driver.find_element_by_xpath('//*[@id="vue-match-centre"]/div/div[1]/div/div/div[2]/div/div[1]/div[1]/div[2]/div/div[2]/div[1]/div/p[2]').get_attribute('innerText').strip()
-        away_team = driver.find_element_by_xpath('//*[@id="vue-match-centre"]/div/div[1]/div/div/div[2]/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div/p[2]').get_attribute('innerText').strip()
-        if home_team == 'Wests Tigers':
-            home_team = 'Tigers'
-        if away_team == 'Wests Tigers':
-            away_team = 'Tigers'
-        home_id = find_team_id(home_team)
-        away_id = find_team_id(away_team)
+            home_team = driver.find_element_by_xpath('//*[@id="vue-match-centre"]/div/div[1]/div/div/div[2]/div/div[1]/div[1]/div[2]/div/div[2]/div[1]/div/p[2]').get_attribute('innerText').strip()
+            away_team = driver.find_element_by_xpath('//*[@id="vue-match-centre"]/div/div[1]/div/div/div[2]/div/div[1]/div[1]/div[2]/div/div[3]/div[1]/div/p[2]').get_attribute('innerText').strip()
+            if home_team == 'Wests Tigers':
+                home_team = 'Tigers'
+            if away_team == 'Wests Tigers':
+                away_team = 'Tigers'
+            home_id = find_team_id(home_team)
+            away_id = find_team_id(away_team)
 
-        home_xpath_div = '1'
-        away_xpath_div = '2'
+            home_xpath_div = '1'
+            away_xpath_div = '2'
 
-        for xpath in [home_xpath_div, away_xpath_div]:
-            wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="player-stats"]/div[' + xpath + ']/div/div[3]/div/table/tbody')))
+            for xpath in [home_xpath_div, away_xpath_div]:
+                wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="player-stats"]/div[' + xpath + ']/div/div[3]/div/table/tbody')))
 
-            i = 1
-            while i <= 17:
-                name_field = driver.find_element_by_xpath('//*[@id="player-stats"]/div[' + xpath + ']/div/div[3]/div/table/tbody/tr['+ str(i) +']/td[2]/a').get_attribute('innerText').strip()
-                first_name = name_field.split(' ')[0].strip().capitalize()
-                last_name = name_field.split(' ')[-1].strip().capitalize()
-                middle_name = name_field.split(' ')[-2].strip()
-                if middle_name.isalpha():
-                    last_name = middle_name.capitalize() + ' ' + last_name
-                if xpath == home_xpath_div:
-                    avoid_name_collision = home_team
-                    current_team = home_id
-                elif xpath == away_xpath_div:
-                    avoid_name_collision = away_team
-                    current_team = away_id
-                full_name = first_name + '_' + last_name + '_' + avoid_name_collision
-                player_id = find_or_create_player(first_name, last_name, str(current_team))
-                #print(player_id)
-                #i += 1
+                i = 1
+                while i <= 17:
+                    name_field = driver.find_element_by_xpath('//*[@id="player-stats"]/div[' + xpath + ']/div/div[3]/div/table/tbody/tr['+ str(i) +']/td[2]/a').get_attribute('innerText').strip()
+                    first_name = name_field.split(' ')[0].strip().capitalize()
+                    last_name = name_field.split(' ')[-1].strip().capitalize()
+                    middle_name = name_field.split(' ')[-2].strip()
+                    if middle_name.isalpha():
+                        last_name = middle_name.capitalize() + ' ' + last_name
+                    if xpath == home_xpath_div:
+                        avoid_name_collision = home_team
+                        current_team = home_id
+                    elif xpath == away_xpath_div:
+                        avoid_name_collision = away_team
+                        current_team = away_id
+                    full_name = first_name + '_' + last_name + '_' + avoid_name_collision
+                    player_id = find_or_create_player(first_name, last_name, str(current_team))
+                    #print(player_id)
+                    #i += 1
 
-                player_match_stats[full_name] = []
-                player_match_stats[full_name].append(player_id)
-                if xpath == home_xpath_div:
-                    player_match_stats[full_name].append(home_id)
-                elif xpath == away_xpath_div:
-                    player_match_stats[full_name].append(away_id)
-                player_match_stats[full_name].append(match_id)
+                    player_match_stats[full_name] = []
+                    player_match_stats[full_name].append(player_id)
+                    if xpath == home_xpath_div:
+                        player_match_stats[full_name].append(home_id)
+                    elif xpath == away_xpath_div:
+                        player_match_stats[full_name].append(away_id)
+                    player_match_stats[full_name].append(match_id)
 
-                column = 3
-                while column <= 66:
-                    if column in [5, 7, 15, 17, 21, 34, 40, 47, 56, 64]:
-                        column += 1
-                        continue
-                    else:
-                        stat_field = driver.find_element_by_xpath('//*[@id="player-stats"]/div[' + xpath + ']/div/div[3]/div/table/tbody/tr[' + str(i) + ']/td[' + str(column) + ']')
-                        player_match_stats[full_name].append(stat_field.get_attribute('innerText').strip())
-                        column += 1
-                print(player_match_stats[full_name])
-                i += 1
+                    column = 3
+                    while column <= 66:
+                        if column in [5, 7, 15, 17, 21, 34, 40, 47, 56, 64]:
+                            column += 1
+                            continue
+                        else:
+                            stat_field = driver.find_element_by_xpath('//*[@id="player-stats"]/div[' + xpath + ']/div/div[3]/div/table/tbody/tr[' + str(i) + ']/td[' + str(column) + ']')
+                            player_match_stats[full_name].append(stat_field.get_attribute('innerText').strip())
+                            column += 1
+                    print(player_match_stats[full_name])
+                    i += 1
+        except:
+            errors['url'].append(url)
+            print('error with' + url)
+            i+= 1
 
     csv_data = pd.DataFrame.from_dict(player_match_stats, orient='index', columns=column_names).replace('-', 0)
 
@@ -163,7 +168,11 @@ for round in match_dictionary:
     print(csv_data)
 
     #CSV naming
-    csv_data.to_csv('round_' + str(round) + '_2018' + '.csv') #index=False)
+    csv_data.to_csv('round_' + str(round) + '_2019' + '.csv') #index=False)
+
+print(errors)
+
+#NEED TO ADD --> Round 1: Knights v Sharks
 
 
 '''
