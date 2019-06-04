@@ -1,14 +1,14 @@
 from flask import Flask, render_template
-
-#from app import app
-
-#create an instance of the Flask class
-app = Flask(__name__)
 from flask_mysqldb import MySQL
 import yaml
 
+
+#create an instance of the Flask class
+app = Flask(__name__)
+#mysql = MySQL()
+
 #Configure db
-db = yaml.load(open)
+db = yaml.load(open('db.yaml'))
 app.config['MYSQL_HOST'] = db['mysql_host']
 app.config['MYSQL_USER'] = db['mysql_user']
 app.config['MYSQL_PASSWORD'] = db['mysql_password']
