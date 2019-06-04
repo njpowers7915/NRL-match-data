@@ -20,7 +20,7 @@ mysql = MySQL(app)
 def index():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM Players")
-    fetchdata = cur.fetchall
+    fetchdata = cur.fetchall()
     cur.close
     return render_template('home.html', data=fetchdata)
 
