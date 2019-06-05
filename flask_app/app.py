@@ -20,6 +20,10 @@ mysql = MySQL(app)
 def index():
     return render_template('home.html')
 
+@app.route('/docs')
+def docs():
+    return render_template('documentation.html')
+
 @app.route('/players')
 def players():
     cur = mysql.connection.cursor()
