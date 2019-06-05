@@ -18,13 +18,9 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM Players")
-    fetchdata = cur.fetchall()
-    cur.close
-    return render_template('home.html', data=fetchdata)
+    pass
 
-@app.route('/players')
+@app.route('/players/<int:player_id>')
 def players():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM Players")
@@ -32,9 +28,19 @@ def players():
     cur.close
     return render_template('home.html', data=fetchdata)
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
+@app.route('/stat-leaders/<stat_category>')
+def stat-leaders():
+    pass
+
+@app.route('/standings')
+def standings():
+    pass
+    #cur = mysql.connection.cursor()
+    #cur.execute("SELECT winner FROM Matches WHERE ")
+
+#@app.route('/login')
+#def login():
+#    return render_template('login.html')
 
 
 #this will allow us to start application
