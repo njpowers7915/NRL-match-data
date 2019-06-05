@@ -1,12 +1,23 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  HOME
+  NRL Database
+  <br>
+  Current Standings
   <table>
-    {% for item in data %}
     <tr>
-      <td>{{ item }}</td>
+      <td>1st</td>
     </tr>
-    {% endfor %}
+    <tr>
+      <td>2nd</td>
+    </tr>
+    <tr>
+      <td>...</td>
+    </tr>
   </table>
+  <br>
+    <p><a href="{{ url_for('players') }}">Player Information</a></p>
+    <p><a href="{{ url_for('stat_leaders') }}">Stat Leaders</a></p>
+    <p><a href="{{ url_for('upcoming_matches') }}">Upcoming Matches</a></p>
+
 {% endblock %}

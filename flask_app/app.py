@@ -18,19 +18,23 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
-    pass
+    return render_template('home.html')
 
-@app.route('/players/<int:player_id>')
+@app.route('/players')
 def players():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM Players")
     fetchdata = cur.fetchall()
     cur.close
-    return render_template('home.html', data=fetchdata)
+    return render_template('players.html', data=fetchdata)
 
-@app.route('/stat-leaders/<stat_category>')
-def stat-leaders():
-    pass
+@app.route('/stat_leaders')
+def stat_leaders():
+    return('stat_leaders.html')
+
+@app.route('/upcoming_matches')
+def upcoming_matches():
+    return('upcoming_matches.html')
 
 @app.route('/standings')
 def standings():

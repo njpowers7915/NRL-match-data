@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  Player List
+  <table>
+    {% for item in data %}
+    <tr>
+      <td>{{ item }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

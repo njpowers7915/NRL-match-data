@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  Upcoming Matches
+  <table>
+    {% for item in data %}
+    <tr>
+      <td>{{ item }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
