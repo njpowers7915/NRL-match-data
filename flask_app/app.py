@@ -24,6 +24,14 @@ def index():
     cur.close
     return render_template('home.html', data=fetchdata)
 
+@app.route('/players')
+def players():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM Players")
+    fetchdata = cur.fetchall()
+    cur.close
+    return render_template('home.html', data=fetchdata)
+
 @app.route('/login')
 def login():
     return render_template('login.html')
