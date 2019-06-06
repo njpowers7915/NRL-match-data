@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_mysqldb import MySQL
 import yaml
-
+from forms import PlayerSearchForm
 
 #create an instance of the Flask class
 app = Flask(__name__)
@@ -25,6 +25,9 @@ def docs():
     return render_template('documentation.html')
 
 @app.route('/players')
+
+
+@app.route('/players/<player_id>')
 def players():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM Players")
