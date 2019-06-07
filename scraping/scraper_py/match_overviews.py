@@ -68,6 +68,7 @@ for match in match_list:
         is_draw = 0
     elif home_score == None and away_score == None:
         winner = None
+        is_draw = None
     else:
         winner = None
         is_draw = 1
@@ -81,23 +82,24 @@ for match in match_list:
     away_team = mycursor.fetchone()[0].lower().strip().replace(' ', '-')
     if away_team == 'tigers':
         away_team = 'wests-tigers'
-    if year == 2018:
-        v = '-vs-'
-    else:
-        v = '-v-'
-    url = 'http://www.nrl.com/draw/nrl-premiership/' + str(year) + '/round-' + str(round) + '/' + home_team + v + away_team + '/'
-
-
+    url = 'http://www.nrl.com/draw/nrl-premiership/' + str(year) + '/round-' + str(round) + '/' + home_team + '-v-' + away_team + '/'
+    print(url)
     matches_2019.append([date, home_team_id, home_score, away_team_id, away_score, winner, is_draw, venue_id, url])
 
 #Check data in CSV format
 #df = pd.DataFrame(completed_matches, columns=["date", "home_id", "home_score", "away_id", "away_score", "winner", "is_draw", "venue"])
 #print(df.to_csv('match_scraping.csv', sep='\t'))
 
-
+'''
 #Add matches to database
 for match in matches_2019:
-    match_query ='''INSERT INTO Matches (date, home_team_id, home_score, away_team_id, away_score, winner, is_draw, stadium_id)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
-    mycursor.execute(match_query, (match[0], match[1], match[2], match[3], match[4], match[5], match[6], match[7]))
-    mydb.commit()
+    get_match_url_query = 'SELECT * FROM Matches WHERE url = %s;'
+    try:
+        mycursor.execute(get_match_url_query, match[8])
+        match = mycursor.fetchall()
+    except:
+        insert_match_query =INSERT INTO Matches (date, home_team_id, home_score, away_team_id, away_score, winner, is_draw, stadium_id, url)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        mycursor.execute(match_query, (match[0], match[1], match[2], match[3], match[4], match[5], match[6], match[7], match[8]))
+        mydb.commit()
+'''
