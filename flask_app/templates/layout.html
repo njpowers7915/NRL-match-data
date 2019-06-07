@@ -3,13 +3,26 @@
   <head>
     <meta charset="utf-8">
     <title>NRL Data</title>
-    <link rel="stylesheet" href="<complete css link from www.bootstrapcdn.com>">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   </head>
 
   <body>
-    <NEED TO ENTER BOOTSTRAP STARTER TEMPLATE FOR A NAVBAR>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href='#'>NRL Data</a>
+      <div class="collapse navbar-collapse" id="navbarItems">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="link1" href="#">Link 1 </a>
+          </li>
+          <li class="nav-item">
+            <a class="link2" href="#">Link 2 </a>
+          </li>
+          <li class="nav-item">
+            <a class="link3" href="#">Link 3 </a>
+          </li>
+    </nav>
     {% block body %}{% endblock %}
 
-    <script src="complete javascript link from www.bootstrapcdn.com"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   </body>
 </html>
