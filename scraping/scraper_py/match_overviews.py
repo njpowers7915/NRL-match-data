@@ -22,7 +22,7 @@ round_tables = round_page.find_all('table')
 match_list = round_page.find_all('tr', style="text-align:center; background:#f5faff;")
 
 
-completed_matches = []
+matches_2019 = []
 for match in match_list:
     match_details = match.find_all('td')
 
@@ -58,18 +58,37 @@ for match in match_list:
         away_score = score.split(' ')[-1]
         away_score = away_score.replace('*', '')
     else:
-        continue
+        home_score = None
+        away_score = None
     if home_score > away_score:
         winner = home_team_id
         is_draw = 0
     elif home_score < away_score:
         winner = away_team_id
         is_draw = 0
+    elif home_score == None and away_score == None:
+        winner = None
     else:
         winner = None
         is_draw = 1
 
-    completed_matches.append([date, home_team_id, home_score, away_team_id, away_score, winner, is_draw, venue_id])
+    #Find URL
+    mycursor.execute("SELECT nickname FROM Teams WHERE id = %s", (home_team_id,))
+    home_team = mycursor.fetchone()[0].lower().strip().replace(' ', '-')
+    if home_team == 'tigers':
+        home_team = 'wests-tigers'
+    mycursor.execute("SELECT nickname FROM Teams WHERE id = %s", (away_team_id,))
+    away_team = mycursor.fetchone()[0].lower().strip().replace(' ', '-')
+    if away_team == 'tigers':
+        away_team = 'wests-tigers'
+    if year == 2018:
+        v = '-vs-'
+    else:
+        v = '-v-'
+    url = 'http://www.nrl.com/draw/nrl-premiership/' + str(year) + '/round-' + str(round) + '/' + home_team + v + away_team + '/'
+
+
+    matches_2019.append([date, home_team_id, home_score, away_team_id, away_score, winner, is_draw, venue_id, url])
 
 #Check data in CSV format
 #df = pd.DataFrame(completed_matches, columns=["date", "home_id", "home_score", "away_id", "away_score", "winner", "is_draw", "venue"])
@@ -77,7 +96,7 @@ for match in match_list:
 
 
 #Add matches to database
-for match in completed_matches:
+for match in matches_2019:
     match_query ='''INSERT INTO Matches (date, home_team_id, home_score, away_team_id, away_score, winner, is_draw, stadium_id)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
     mycursor.execute(match_query, (match[0], match[1], match[2], match[3], match[4], match[5], match[6], match[7]))
