@@ -86,7 +86,7 @@ wait = WebDriverWait(driver, 10)
 #4. Go through all URLs
 for round in match_dictionary:
     player_match_stats = {}
-    for match in match_dictionary[round]:
+    for match in match_dictionary[round][1:2]:
         match_id = match[0]
         url = match[1]
         try:
@@ -172,7 +172,7 @@ for round in match_dictionary:
 
 print(errors)
 
-#NEED TO ADD --> Round 1: Knights v Sharks
+#NEED TO ADD --> Round 1: Need to add Kinghts vs Sharks
 
 
 '''
