@@ -4,21 +4,10 @@
   <h2>NRL Database</h2>
   <p><a href="{{ url_for('docs') }}">Docs</a></p>
   <br>
-  Current Standings
-  <table>
-    <tr>
-      <td>1st</td>
-    </tr>
-    <tr>
-      <td>2nd</td>
-    </tr>
-    <tr>
-      <td>...</td>
-    </tr>
-  </table>
-  <br>
-    <p><a href="{{ url_for('players') }}">Player Information</a></p>
+  
+    <p><a href="{{ url_for('standings') }}">Current Standings</a></p>
+    <p><a href="{{ url_for('players') }}">Player Search</a></p>
     <p><a href="{{ url_for('stat_leaders') }}">Stat Leaders</a></p>
-    <p><a href="{{ url_for('upcoming_matches') }}">Upcoming Matches</a></p>
+    <p><a href="{{ url_for('upcoming_matches') }}">Upcoming Match Predictions</a></p>
 
 {% endblock %}

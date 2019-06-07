@@ -1,7 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_mysqldb import MySQL
 import yaml
-from forms import PlayerSearchForm
+#from forms import PlayerSearchForm
 
 #create an instance of the Flask class
 app = Flask(__name__)
@@ -24,16 +24,31 @@ def index():
 def docs():
     return render_template('documentation.html')
 
-@app.route('/players')
-
-
-@app.route('/players/<player_id>')
+@app.route('/players', methods=['GET', 'POST'])
 def players():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM Players")
-    fetchdata = cur.fetchall()
-    cur.close
-    return render_template('players.html', data=fetchdata)
+    search = PlayerSearchForm(request.form)
+    if request.method == 'POST':
+        return search_results(search)
+    return render_template('players.html', form=search)
+
+@app.route('/player_results')
+def player_results(search):
+    results = []
+    search_string = search.data['search']
+
+    if search.data['search'] == '':
+        pass
+
+
+
+
+#def player_id():
+#    cur = mysql.connection.cursor()
+#    cur.execute("SELECT * FROM Players")
+#    fetchdata = cur.fetchall()
+#    cur.close
+#    return render_template('players.html', data=fetchdata)
+
 
 @app.route('/stat_leaders')
 def stat_leaders():
@@ -45,7 +60,7 @@ def upcoming_matches():
 
 @app.route('/standings')
 def standings():
-    pass
+    return('standings.html')
     #cur = mysql.connection.cursor()
     #cur.execute("SELECT winner FROM Matches WHERE ")
 

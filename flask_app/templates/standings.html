@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  Standings
+  <table>
+    {% for item in data %}
+    <tr>
+      <td>{{ item }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+
+Current Standings
+<table>
+  <tr>
+    <td>1st</td>
+  </tr>
+  <tr>
+    <td>2nd</td>
+  </tr>
+  <tr>
+    <td>...</td>
+  </tr>
+</table>
+<br>
