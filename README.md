@@ -25,7 +25,7 @@ Method 2 (Under Construction)
 
     $ flask run
 
-### Prerequisites
+## Prerequisites
 
 Make sure you have the latest version of Flask installed on your computer
 
