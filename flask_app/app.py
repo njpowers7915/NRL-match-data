@@ -1,25 +1,51 @@
-from flask import Flask, render_template, redirect
-from flask_mysqldb import MySQL
-import yaml
+from flask import Flask, request, redirect, jsonify, render_template
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+from flask_marshmallow import Marshmallow
+import os
+#from flask_mysqldb import MySQL
+#from flask_rest_jsonapi import Api, ResourceDetail, ResourceList, ResourceRelationship
+
+#from flask_restful import Resource, Api
+#from marshmallow_jsonapi.flask import Schema, ResourceRelationship
+#from marshmallow_jsonapi import fields
+#import yaml
 #from forms import PlayerSearchForm
 
-#create an instance of the Flask class
+#Create Flask App
 app = Flask(__name__)
-#mysql = MySQL()
+basedir = os.path.abspath(os.path.dirname(__file__))
+engine = create_engine('mysql://root:NYg1%40nts@localhost:3306/NRL_data')
+db = engine.connect()
+#Database
 
-#Configure db
-db = yaml.load(open('db.yaml'))
-app.config['MYSQL_HOST'] = db['mysql_host']
-app.config['MYSQL_USER'] = db['mysql_user']
-app.config['MYSQL_PASSWORD'] = db['mysql_password']
-app.config['MYSQL_DB'] = db['mysql_db']
-mysql = MySQL(app)
+#Init ma
+ma = Marshmallow(app)
+
+# Player Class/Model
+class Player(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column
+
+#Player Schema
+class PlayerSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'first_name', 'last_name', 'current_team')
+
+#Init Schema
+player_schema = PlayerSchema(strict=True)
+players_schema = PlayersSchema(many=True, strict=True)
+
+
+api.add_resource(Player, '/')
+api.add_resource(Team, '/multi/<int:num>')
+
 
 
 @app.route('/')
 def index():
-    return render_template('home.html')
-
+    return jsonify({"about": "Hello!"})
+'''
 @app.route('/docs')
 def docs():
     return render_template('documentation.html')
@@ -68,7 +94,7 @@ def standings():
 #def login():
 #    return render_template('login.html')
 
-
-#this will allow us to start application
+'''
+# Run Server
 if __name__ == '__main__':
     app.run(debug=True)
