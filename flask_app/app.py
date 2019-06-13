@@ -27,6 +27,11 @@ class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column
 
+    def __init__(self, first_name, last_name, current_team):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.current_team = current_team
+
 #Player Schema
 class PlayerSchema(ma.Schema):
     class Meta:
@@ -35,6 +40,20 @@ class PlayerSchema(ma.Schema):
 #Init Schema
 player_schema = PlayerSchema(strict=True)
 players_schema = PlayersSchema(many=True, strict=True)
+
+#Get All Players
+@app.route('/players', methods=['GET'])
+def get_players():
+    all_players = Player.query.all()
+    result = players_schema.dump(all_players)
+    return jsonify(result.data)
+
+# Get Single Player
+@app.route('/player/<id>', methods=['GET'])
+def get_player(id):
+    player = Player.query.get(id)
+    return player_schema.jsonify(player)
+
 
 
 api.add_resource(Player, '/')
