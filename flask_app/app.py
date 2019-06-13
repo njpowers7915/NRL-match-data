@@ -21,7 +21,7 @@ db = engine.connect()
 
 #Init ma
 ma = Marshmallow(app)
-
+'''
 # Player Class/Model
 class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -40,6 +40,13 @@ class PlayerSchema(ma.Schema):
 #Init Schema
 player_schema = PlayerSchema(strict=True)
 players_schema = PlayersSchema(many=True, strict=True)
+'''
+@app.route('/')
+def index():
+    return render_template('home.html')
+    #return jsonify({"about": "Hello!"})
+
+
 
 #Get All Players
 @app.route('/players', methods=['GET'])
@@ -56,14 +63,12 @@ def get_player(id):
 
 
 
-api.add_resource(Player, '/')
-api.add_resource(Team, '/multi/<int:num>')
+#api.add_resource(Player, '/')
+#api.add_resource(Team, '/multi/<int:num>')
 
 
 
-@app.route('/')
-def index():
-    return jsonify({"about": "Hello!"})
+
 '''
 @app.route('/docs')
 def docs():
