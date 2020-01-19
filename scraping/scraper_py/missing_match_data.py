@@ -7,15 +7,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
-#SQL Imports
 import mysql.connector
-#Pandas imports
 import pandas as pd
+from dotenv import load_dotenv
+import os
 
 mydb = mysql.connector.connect(
   host="localhost",
-  user="root",
-  passwd="NYg1@nts",
+  user=os.getenv("DB_USER"),
+  passwd=os.getenv("DB_PASSWORD"),
   database="NRL_data"
 )
 mycursor = mydb.cursor()

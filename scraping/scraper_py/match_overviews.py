@@ -4,11 +4,15 @@ from bs4 import BeautifulSoup
 import mysql.connector
 from datetime import datetime
 import pandas as pd
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 mydb = mysql.connector.connect(
   host="localhost",
-  user="root",
-  passwd="NYg1@nts",
+  user=os.getenv("DB_USER"),
+  passwd=os.getenv("DB_PASSWORD"),
   database="NRL_data"
 )
 mycursor = mydb.cursor()
@@ -57,9 +61,14 @@ for match in match_list:
         home_score = score.split(' ')[0]
         away_score = score.split(' ')[-1]
         away_score = away_score.replace('*', '')
+    elif ' ' in score[0] == False:
+        home_score = score.split('-')[0]
+        away_score = score.split('-')[1]
     else:
         home_score = None
         away_score = None
+    print(home_score)
+    print(away_score)
     if home_score == None and away_score == None:
         winner = None
         is_draw = None
@@ -111,14 +120,16 @@ for match in match_list:
 
 #Add matches to database
 for match in matches_2019:
+    print(match)
     get_match_url_query = 'SELECT * FROM Matches WHERE url = %s;'
-    try:
-        mycursor.execute(get_match_url_query, (match[8],))
-        match = mycursor.fetchall()
+    mycursor.execute(get_match_url_query, (match[8],))
+    result = mycursor.fetchall()
+    print(result)
+    if result != []:
         print('success')
-    except:
+    else:
         print(match)
         insert_match_query ='''INSERT INTO Matches (date, home_team_id, home_score, away_team_id, away_score, winner, is_draw, stadium_id, url, round)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-        mycursor.execute(insert_match_query, (match[0], match[1], match[2], match[3], match[4], match[5], match[6], match[7], match[8], match[9]))
+        mycursor.execute(insert_match_query, (match[0], match[1], match[2], match[3], match[4], match[5], match[6], match[7], match[8], match[9],))
         mydb.commit()
