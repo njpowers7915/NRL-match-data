@@ -17,7 +17,7 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-round_url = 'https://en.wikipedia.org/wiki/2019_NRL_season_results'
+round_url = 'https://en.wikipedia.org/wiki/2017_NRL_season_results'
 response = requests.get(round_url)
 round_page = BeautifulSoup(response.content, 'html.parser')
 round_tables = round_page.find_all('table')
@@ -44,7 +44,7 @@ for match in match_list:
 
     #date
     unformatted_date = match_details[3].text.strip() + ' 2019'
-    date = datetime.strptime(unformatted_date, '%A, %d %B, %I:%M%p %Y')
+    date = datetime.strptime(unformatted_date, '%A, %d %B, %I:%M %p %Y')
 
     #venue info
     venue = match_details[4].text.strip()
@@ -57,14 +57,18 @@ for match in match_list:
 
     #score info
     score = match_details[1].text.strip()
-    if score[0].isdigit():
-        home_score = score.split(' ')[0]
-        away_score = score.split(' ')[-1]
-        away_score = away_score.replace('*', '')
-    elif ' ' in score[0] == False:
-        home_score = score.split('-')[0]
-        away_score = score.split('-')[1]
-    else:
+    try:
+        if score[0].isdigit():
+            home_score = score.split(' ')[0]
+            away_score = score.split(' ')[-1]
+            away_score = away_score.replace('*', '')
+        elif ' ' in score[0] == False:
+            home_score = score.split('-')[0]
+            away_score = score.split('-')[1]
+        else:
+            home_score = score.split('-')[0]
+            away_score = score.split('-')[1]
+    except:
         home_score = None
         away_score = None
     print(home_score)
@@ -120,16 +124,16 @@ for match in match_list:
 
 #Add matches to database
 for match in matches_2019:
-    print(match)
     get_match_url_query = 'SELECT * FROM Matches WHERE url = %s;'
     mycursor.execute(get_match_url_query, (match[8],))
     result = mycursor.fetchall()
-    print(result)
     if result != []:
         print('success')
     else:
         print(match)
         insert_match_query ='''INSERT INTO Matches (date, home_team_id, home_score, away_team_id, away_score, winner, is_draw, stadium_id, url, round)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-        mycursor.execute(insert_match_query, (match[0], match[1], match[2], match[3], match[4], match[5], match[6], match[7], match[8], match[9],))
-        mydb.commit()
+        #mycursor.execute(insert_match_query, (match[0], match[1], match[2], match[3], match[4], match[5], match[6], match[7], match[8], match[9],))
+        #mydb.commit()
+
+mydb.close()
