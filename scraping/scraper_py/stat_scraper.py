@@ -38,7 +38,7 @@ column_names = ['player_id', 'team_id', 'match_id',
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="NYg1@nts",
+  passwd="",
   database="NRL_data"
 )
 mycursor = mydb.cursor(buffered=True)
