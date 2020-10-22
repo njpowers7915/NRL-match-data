@@ -14,7 +14,7 @@ mycursor = mydb.cursor(buffered=True)
 round_input = input('Round number: ')
 year_input = input('Year: ')
 
-csv_name = ('../../scraping/scraper_py/round_' + str(round_input) + '_' + str(year_input) + '.csv')
+csv_name = ('../../scraping/csv_files/2018/round_' + str(round_input) + '_' + str(year_input) + '.csv')
 
 open_file = open(csv_name)
 read_file = list(csv.reader(open_file))
