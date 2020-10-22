@@ -22,7 +22,7 @@ https://github.com/njpowers7915/NRL-match-data/blob/master/NRL%20match%20analysi
 
 You can access this data via two methods:
 
-Method 1 -- Download the MySQL database file (NRL_data_July_7_2020.sql) from the db folder in this repository
+Method 1 -- Download the MySQL database file (NRL_database.sql) from the db folder in this repository
 
 Method 2 (Under Construction) -- Flask API
 
