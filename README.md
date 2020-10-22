@@ -15,7 +15,7 @@ I used the data from the 2018 NRL Season to analyze whether or not the selection
 2018's Team of the Year were justified given the players' stats over the course of the season.
 Below is a link to this analysis:
 
-https://github.com/njpowers7915/NRL-match-data/blob/master/analysis_2018/NRL%20match%20analysis.ipynb
+https://github.com/njpowers7915/NRL-match-data/blob/master/analysis_2018/Analysis%20-%202018%20Team%20of%20the%20Year.ipynb
 
 
 ## Accessing the data
