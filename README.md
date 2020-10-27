@@ -17,6 +17,9 @@ Below is a link to this analysis:
 
 https://github.com/njpowers7915/NRL-match-data/blob/master/analysis_2018/Analysis%20-%202018%20Team%20of%20the%20Year.ipynb
 
+## Scraping
+
+All of the code that I used to put together this database is in the scraping folder along with a README that describes my process.
 
 ## Accessing the data
 
